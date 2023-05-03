@@ -5,7 +5,7 @@
 
 # WRRC
 ## The web request response cicle for this website:
-![WRRC](./wrrc.png)
+![WRRC](./wrrc2.png)
 
 # Overview
 This website brovides movies names with details for each movie in the home page   
