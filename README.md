@@ -1,11 +1,11 @@
 
-# Movies-Library -Version 2
+# Movies-Library -Version 3
 
 # ***Author Name***: ***Rama Wael***
 
 # WRRC
 ## The web request response cicle for this website:
-![WRRC](./wrrc2.png)
+![WRRC](./wrrc3.png)
 
 # Overview
 This website brovides movies names with details for each movie in the home page   
@@ -23,13 +23,16 @@ then you will see them in package.json file
 5.After every change (ctrl+c) then rewrite (npm start) and refresh to get results
 
 # Project Features
-for today I added a lot of pages   
+Ok, for today i started to create database and I have added some info about my favourite movie to it
+-First I added function addMovies to add the movie and it's details 
+-then I added getMovies function to get that movie that i added
+<!-- for today I added a lot of pages   
 1. I added functions to moves you to several pages like:  
 a. function with path "/" that display home page which provide some info from (data.json file)//it's from the previous lab  
 b.also favorite page that displays favorite page with path "/favorite"  
 c. I added trending page with path"/trending" that display trending movies for the week (brings data from API from (The Moviedb) website)  
 d. I also added search page   
-e. I added genres page that display type of movies in general and another page to display one of my favorite actors info (favActor page)
+e. I added genres page that display type of movies in general and another page to display one of my favorite actors info (favActor page) -->
 <!-- -I added "/" this path which move you to the home that display some details about the movies  
 -also I added "/favorite" this path that moves you to favorite page which display the favorite movies   
 -I added 404 status to handle (page not found) errors and another 500 status to handle server errors  -->

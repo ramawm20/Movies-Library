@@ -5,19 +5,25 @@ const express = require("express");
 const cors = require("cors")
 const server = express();
 require('dotenv').config();
+const pg = require('pg')
 server.use(cors())
 const PORT = 3002;
 const axios = require("axios")
-let data = require("./data.json")
+const data = require("./data.json")
 const apikey = process.env.APIkey;
+server.use(express.json())
 
+const client = new pg.Client('postgresql://localhost:5432/class15')
 //calling functions
 server.get('/', home)
 server.get('/favorite', favorite)
 server.get('/trending', trending)
 server.get('/search', search)
-server.get('/genres',genres)
-server.get('/favactor',favActor)
+server.get('/genres', genres)
+server.get('/favactor', favActor)
+server.get('/getMovies', getMovies)
+server.post('/getMovies', addMovies)
+
 server.get('*', notFound)
 
 server.use(errorHandler)
@@ -116,8 +122,39 @@ function favActor(req, res) {
             res.send(r)
         }
         )
-       
+
 }
+function getMovies(req, res) {
+    const sql = 'SELECT * FROM favoriteMovie'
+    client.query(sql)
+        .then(data => {
+            res.send(data.rows)
+        })
+        .catch((error) => {
+            errorHandler(error, req, res)
+        })
+
+}
+function addMovies(req, res) {
+    const movie = req.body;
+    console.log(movie);
+    const sql=`INSERT INTO favoriteMovie (title, summary, years)
+    VALUES ($1, $2, $3);`
+    const values=[movie.title,movie.summary,movie.years];
+    client.query(sql,values)
+    .then(data=>{
+        res.send("Your data added successfully, Congrats")
+    })
+    .catch((error)=>{
+        errorHandler(error,req,res)
+    })
+
+}
+
+
+
+
+
 
 //handle the server errors
 /* server.get("", (req, res) => {
@@ -128,7 +165,9 @@ function favActor(req, res) {
     }
     res.status(errorNum).send(obj)
 }) */
-
-server.listen(PORT, () => {
-    console.log(`Listening on ${PORT} : I am ready `);
-})
+client.connect()
+    .then(() => {
+        server.listen(PORT, () => {
+            console.log(`Listening on ${PORT} : I am ready `);
+        })
+    })
