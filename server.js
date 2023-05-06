@@ -20,6 +20,8 @@ server.get('/genres',genres)
 server.get('/favactor',favActor)
 server.get('*', notFound)
 
+server.use(errorHandler)
+
 //home function to display home 
 function home(req, res) {
     function Movies(title, posterPath, overview) {
