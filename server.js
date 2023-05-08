@@ -13,6 +13,7 @@ const data = require("./data.json")
 const apikey = process.env.APIkey;
 server.use(express.json())
 
+
 const client = new pg.Client('postgresql://localhost:5432/class15')
 //calling functions
 server.get('/', home)
@@ -23,8 +24,11 @@ server.get('/genres', genres)
 server.get('/favactor', favActor)
 server.get('/getMovies', getMovies)
 server.post('/getMovies', addMovies)
-
+server.delete('/getMovies/:id', deleteMovie)
+server.put('/getMovies/:id', updateMovie)
+server.get('/getMovies/:id', getSpecificMovie)
 server.get('*', notFound)
+
 
 server.use(errorHandler)
 
@@ -118,6 +122,8 @@ function favActor(req, res) {
 
 }
 
+//lab 15 functions
+//get all movies function
 function getMovies(req, res) {
     const sql = 'SELECT * FROM favoriteMovie'
     client.query(sql)
@@ -129,12 +135,14 @@ function getMovies(req, res) {
         })
 
 }
+
+//add movie to the DB
 function addMovies(req, res) {
     const movie = req.body;
     console.log(movie);
     const sql = `INSERT INTO favoriteMovie (title, summary, years, comment)
     VALUES ($1, $2, $3, $4);`
-    const values = [movie.title, movie.summary, movie.years,movie.comment];
+    const values = [movie.title, movie.summary, movie.years, movie.comment];
     client.query(sql, values)
         .then(data => {
             res.status(201).send("Your data added successfully, Congrats")
@@ -145,6 +153,56 @@ function addMovies(req, res) {
 
 }
 
+//lab 16 functions
+//function to delete specific movie from DB
+function deleteMovie(req, res) {
+    const { id } = req.params;
+    const sql = `DELETE FROM favoriteMovie WHERE id=${id}`
+    client.query(sql)
+        .then((data) => {
+            res.status(200).send(data)
+        })
+        .catch((error) => {
+            errorHandler(error, req, res)
+        })
+
+}
+
+//function to ubdate specific movie 
+function updateMovie(req, res) {
+
+    const { id } = req.params;
+    console.log(req.body);
+    const sql = `UPDATE favoriteMovie SET comment= $1 WHERE id=${id};`
+
+    const { comment } = req.body;
+    const values = [comment];
+
+    client.query(sql, values)
+        .then((data) => {
+            res.status(205).send(data)
+        })
+        .catch((error) => {
+            errorHandler(error, req, res)
+        })
+}
+
+//function to get specific movie by the id
+function getSpecificMovie(req, res) {
+    const { id } = req.params;
+    const sql = `SELECT * FROM favoriteMovie WHERE id=${id}`
+
+    client.query(sql)
+        .then((data) => {
+            res.status(200).send(data.rows)
+        })
+        .catch((error) => {
+            errorHandler(error, req, res)
+        })
+}
+
+
+//error handler function
 function errorHandler(error, req, res) {
     const err = {
         status: 500,
@@ -153,7 +211,7 @@ function errorHandler(error, req, res) {
     res.status(500).send(err);
 }
 
-
+//connect to the server
 client.connect()
     .then(() => {
         server.listen(PORT, () => {
