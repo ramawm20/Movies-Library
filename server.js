@@ -105,13 +105,6 @@ function genres(req, res) {
         errorHandler(error, req, res)
     }
 }
-function errorHandler(error, req, res) {
-    const err = {
-        status: 500,
-        message: error
-    }
-    res.status(500).send(err);
-}
 
 //favActor function that display info of one of my favorite actors
 function favActor(req, res) {
@@ -124,6 +117,7 @@ function favActor(req, res) {
         )
 
 }
+
 function getMovies(req, res) {
     const sql = 'SELECT * FROM favoriteMovie'
     client.query(sql)
@@ -138,33 +132,28 @@ function getMovies(req, res) {
 function addMovies(req, res) {
     const movie = req.body;
     console.log(movie);
-    const sql=`INSERT INTO favoriteMovie (title, summary, years)
+    const sql = `INSERT INTO favoriteMovie (title, summary, years)
     VALUES ($1, $2, $3);`
-    const values=[movie.title,movie.summary,movie.years];
-    client.query(sql,values)
-    .then(data=>{
-        res.send("Your data added successfully, Congrats")
-    })
-    .catch((error)=>{
-        errorHandler(error,req,res)
-    })
+    const values = [movie.title, movie.summary, movie.years];
+    client.query(sql, values)
+        .then(data => {
+            res.status(201).send("Your data added successfully, Congrats")
+        })
+        .catch((error) => {
+            errorHandler(error, req, res)
+        })
 
 }
 
-
-
-
-
-
-//handle the server errors
-/* server.get("", (req, res) => {
-    let errorNum = 500;
-    let obj = {
-        status: errorNum,
-        responseText: "Sorry, something went wrong"
+function errorHandler(error, req, res) {
+    const err = {
+        status: 500,
+        message: error
     }
-    res.status(errorNum).send(obj)
-}) */
+    res.status(500).send(err);
+}
+
+
 client.connect()
     .then(() => {
         server.listen(PORT, () => {
