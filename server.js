@@ -11,10 +11,11 @@ const PORT = 3002;
 const axios = require("axios")
 const data = require("./data.json")
 const apikey = process.env.APIkey;
+const DBURL=process.env.DatabaseUrl;
 server.use(express.json())
 
 
-const client = new pg.Client('postgresql://localhost:5432/class15')
+const client = new pg.Client(`${DBURL}`)
 //calling functions
 server.get('/', home)
 server.get('/favorite', favorite)
