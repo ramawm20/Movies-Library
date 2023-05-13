@@ -86,8 +86,7 @@ function search(req, res) {
         }
         )
         .catch((error) => {
-            console.log(`sorry, you have somthing wrong`, error);
-            res.status(500).send(error)
+            errorHandler(error,req,res)
         })
 }
 
@@ -101,8 +100,7 @@ function genres(req, res) {
                 res.send(r)
             })
             .catch((error) => {
-                console.log(`sorry, you have somthing wrong`, error);
-                res.status(500).send(error)
+               errorHandler(error,req,res)
             })
 
     }
@@ -120,6 +118,10 @@ function favActor(req, res) {
             res.send(r)
         }
         )
+        .catch((error) => {
+            errorHandler(error, req, res)
+        })
+        
 
 }
 
