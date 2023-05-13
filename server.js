@@ -7,7 +7,7 @@ const server = express();
 require('dotenv').config();
 const pg = require('pg')
 server.use(cors())
-const PORT = 3002;
+const PORT = process.env.PORT;
 const axios = require("axios")
 const data = require("./data.json")
 const apikey = process.env.APIkey;
